@@ -48,8 +48,8 @@ func main() {
 		port = "8000"
 	}
 
-	log.Println("🚀 Server running at http://0.0.0.0:" + port)
+	log.Println("Server running at http://0.0.0.0:" + port)
 	if err := app.Listen("0.0.0.0:" + port); err != nil {
-		log.Fatal("🔥 Failed to start server: ", err)
+		log.Fatal("Failed to start server: ", err)
 	}
 }
