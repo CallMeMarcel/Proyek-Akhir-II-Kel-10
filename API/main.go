@@ -14,10 +14,12 @@ import (
 )
 
 func main() {
-	// Load .env
+	// Load .env hanya jika tersedia (untuk lokal)
 	if err := godotenv.Load(); err != nil {
-		log.Fatal("❌ Error loading .env file")
+		log.Println("⚠️ .env file not found, using system environment variables")
 	}
+
+	log.Println("✅ Starting API service...")
 
 	// Koneksi ke database
 	database.Connect()
@@ -33,23 +35,19 @@ func main() {
 		AllowOrigins:     "*",
 	}))
 
-	
-
-
-	// Setup semua route yang ada di folder routes/
+	// Setup semua route
 	routes.Setup(app)
 
-	// Tambahkan route untuk Midtrans
+	// Route khusus Midtrans
 	app.Post("/api/create-transaction", admin.CreateTransaction)
 
-	// Jalankan server
+	// Jalankan server di port dari ENV atau default 8000
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8000"
 	}
-
-	log.Println("Server running at http://0.0.0.0:" + port)
+	log.Println("🚀 Server running at http://0.0.0.0:" + port)
 	if err := app.Listen("0.0.0.0:" + port); err != nil {
-		log.Fatal("Failed to start server: ", err)
+		log.Fatal("🔥 Failed to start server:", err)
 	}
 }
